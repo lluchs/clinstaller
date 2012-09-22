@@ -71,17 +71,20 @@
 (defn do-download
   "Starts the download, calling the given function on completion."
   [func]
-  (try
-    (doseq [subdir (cfg/repos :paths)]
-      (svn/download (cfg/repos :url) (branch-selection) subdir))
-    (catch Exception e
-      (alert f (.getMessage e))))
-  (func))
+  (let [branch (branch-selection)]
+    (.start (Thread.
+      (fn []
+        (try
+          (doseq [subdir (cfg/repos :paths)]
+            (svn/download (cfg/repos :url) branch subdir))
+          (catch Exception e
+            (invoke-now (alert f (.getMessage e)))))
+        (invoke-later (func)))))))
 
 (defn set-downloading
   "Sets widgets into downloading state or resets them."
   [on]
-  (config! (select action-panel [:*]) :enabled? (not on))
+  (config! (config action-panel :items) :enabled? (not on))
   (config! pb :visible? on))
 
 ; Events
