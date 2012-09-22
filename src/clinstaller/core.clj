@@ -1,11 +1,15 @@
 (ns clinstaller.core
   (:gen-class)
   (:require [clinstaller.cfg :as cfg]
-            [clinstaller.svn :as svn])
+            [clinstaller.svn :as svn]
+            [clj-http.client :as client])
   (:use seesaw.core
         clojure.java.io))
 
 (native!)
+
+; Extract a list of branches
+(def branches (map :name (:body (client/get (cfg/api :branches) {:as :json}))))
 
 (def pb (progress-bar :indeterminate? true
                       :visible? false))
@@ -23,7 +27,9 @@
                             :text "master")
                      (radio :group branch-group
                             :id :other-branch)
-                     (text :id :branch)]))
+                     (combobox :model branches
+                               :editable? true
+                               :id :branch)]))
 
 (def f (frame
          :title "Clinstaller v2"
