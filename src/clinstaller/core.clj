@@ -9,7 +9,7 @@
 (native!)
 
 ; Extract a list of branches
-(def branches (map :name (:body (client/get (cfg/api :branches) {:as :json}))))
+(def branches (sort (map :name (:body (client/get (cfg/api :branches) {:as :json})))))
 
 (def pb (progress-bar :indeterminate? true
                       :visible? false))
