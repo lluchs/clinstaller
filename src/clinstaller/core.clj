@@ -34,7 +34,7 @@
 (def f (frame
          :title "Clinstaller v2"
          :on-close :exit
-         :size [300 :by 200]
+         :size [300 :by 150]
          :resizable? false
          :content
          (border-panel :hgap 5 :vgap 5 :border 5
