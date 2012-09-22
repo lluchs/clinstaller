@@ -88,7 +88,7 @@
   (config! pb :visible? on))
 
 ; Events
-(listen (select f [:#branch]) :focus-gained
+(listen (select f [:#branch]) :action
         (fn [e]
           (config! (select f [:#other-branch]) :selected? true)))
 
